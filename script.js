@@ -60,7 +60,7 @@ const molecules = [
     { "id": 49, "name": "Pyridinium", "structure": "C5H5NH+", "smiles": "[nH+]1ccccc1", "pka": 5.2, "functionalGroup": "Protonated pyridine", "category": "Nitrogen acids" },
     { "id": 50, "name": "4-CH₃C₆H₄NH₃⁺", "structure": "4-CH3C6H4NH3+", "smiles": "Cc1ccc(cc1)[NH3+]", "pka": 5.4, "functionalGroup": "4-Methylanilinium", "category": "Nitrogen acids" },
     { "id": 51, "name": "H₂CO₂⁺NH₃⁺", "structure": "HOCONHNH3+", "smiles": "NC(=O)[OH+]", "pka": 6.0, "functionalGroup": "Protonated semicarbazide", "category": "Nitrogen acids" },
-    { "id": 52, "name": "Imidazolium", "structure": "ImH+", "smiles": "[nH+]1cncc1", "pka": 7.0, "functionalGroup": "Protonated imidazole", "category": "Nitrogen acids" },
+    { "id": 52, "name": "Imidazolium", "structure": "C3H5N2+", "smiles": "C1=C[NH+]=CN1", "pka": 7.0, "functionalGroup": "Protonated imidazole", "category": "Nitrogen acids" },
     { "id": 53, "name": "H₂NNH₃⁺", "structure": "H2NNH3+", "smiles": "[NH3+]N", "pka": 7.9, "functionalGroup": "Protonated hydrazine", "category": "Nitrogen acids" },
     { "id": 54, "name": "NH₄⁺", "structure": "NH4+", "smiles": "[NH4+]", "pka": 9.2, "functionalGroup": "Ammonium", "category": "Nitrogen acids" },
     { "id": 55, "name": "4-CH₃C₆H₄NH₃⁺", "structure": "4-CH3C6H4NH3+", "smiles": "Cc1ccc(cc1)[NH3+]", "pka": 9.3, "functionalGroup": "p-Toluidinium", "category": "Nitrogen acids" },
@@ -472,3 +472,4 @@ window.initRDKitModule().then(function(RDKit) {
     alert('Failed to load molecule renderer. Please refresh the page.');
 
 });
+
