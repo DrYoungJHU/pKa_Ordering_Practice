@@ -1,0 +1,756 @@
+:root {
+    --bg-color: #f4f7f6;
+    --panel-color: #ffffff;
+    --primary-color: #007bff;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    background: var(--bg-color); 
+    display: flex; 
+    justify-content: center; 
+    padding: 20px; 
+}
+
+.app-container { 
+    background: var(--panel-color); 
+    padding: 30px; 
+    border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+    max-width: 1100px;
+    width: 100%;
+    text-align: center; 
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.controls-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.switch-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    display: none !important;
+}
+
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #108b00;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #800000;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+#practice-toggle + .slider {
+    background-color: #007bff;
+}
+
+#practice-toggle:checked + .slider {
+    background-color: #fd7e14;
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+button { 
+    padding: 10px 20px; 
+    background: #28a745; 
+    color: white; 
+    border: solid 2px #000000; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+button.secondary { 
+    background: #007bff; 
+}
+
+.stats-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 0 auto 10px;
+    line-height: 1.6;
+}
+
+/* ==================== TWO COLUMN LAYOUT ==================== */
+
+#molecule-stage {
+    position: relative;
+    width: 80%;
+    margin: 20px auto;
+    padding: 25px;
+    background: linear-gradient(135deg, #332a7d 0%, #764ba2 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.two-column-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.molecule-bank,
+.drop-zone {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.molecule-bank {
+    flex: 1;
+}
+
+.drop-zone {
+    min-height: 500px;
+}
+
+.molecule-bank h3,
+.drop-zone h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2em;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+/* ==================== PRACTICE CONTROLS ==================== */
+
+.practice-controls {
+    background: rgba(255, 255, 255, 0.98);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.practice-controls button {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 12px 20px;
+    font-size: 0.95em;
+}
+
+.check-btn {
+    background: #28a745 !important;
+    color: white;
+    border: solid 2px #000000;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.check-btn:hover {
+    background: #218838 !important;
+}
+
+.hint-btn {
+    background: #ffc107 !important;
+    color: #000;
+    border: solid 2px #000000;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.hint-btn:hover {
+    background: #e0a800 !important;
+}
+
+#practice-feedback {
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+#hint-box {
+    text-align: left;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== MOLECULE BANK ==================== */
+
+#molecule-bank-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.molecule-card {
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 10px;
+    cursor: move;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.molecule-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    border-color: #0056b3;
+}
+
+.molecule-card.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.molecule-card.in-slot {
+    opacity: 0.3;
+    pointer-events: none;
+    background: #f8f9fa;
+}
+
+.molecule-structure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rdkit-viewer {
+    width: 800px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rdkit-viewer svg {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.molecule-info {
+    text-align: left;
+}
+
+.molecule-name {
+    font-weight: bold;
+    font-size: 0.95em;
+    color: #007bff;
+    margin-bottom: 2px;
+}
+
+.molecule-group {
+    font-size: 0.75em;
+    color: #666;
+    font-style: italic;
+}
+
+/* ==================== DROP SLOTS ==================== */
+
+#drop-slots-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.drop-slot {
+    background: #bbcee0;
+    border: 3px dashed #ccc;
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 85px;
+    transition: all 0.3s ease;
+}
+
+.drop-slot.drag-over {
+    background: rgba(40, 167, 69, 0.1);
+    border-color: #28a745;
+    border-style: solid;
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(40, 167, 69, 0.3);
+}
+
+.drop-slot.filled {
+    background: white;
+    border-color: var(--primary-color);
+    border-style: solid;
+}
+
+.drop-slot.correct {
+    background: rgba(40, 167, 69, 0.1);
+    border-color: #28a745;
+    border-width: 3px;
+}
+
+.drop-slot.incorrect {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    border-width: 3px;
+}
+
+.slot-header {
+    display: grid;
+    grid-template-columns: 45px 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.slot-number {
+    width: 35px;
+    height: 35px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2em;
+    flex-shrink: 0;
+}
+
+.slot-label {
+    font-size: 0.85em;
+    color: #555;
+    text-align: left;
+    line-height: 1.1;
+}
+
+.slot-label small {
+    font-size: 0.85em;
+    color: #999;
+}
+
+.slot-content {
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.slot-content.empty {
+    border: 2px dashed #ddd;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.slot-content.empty::after {
+    content: 'Drop molecule here';
+    color: #aaa;
+    font-style: italic;
+    font-size: 0.9em;
+}
+
+/* Molecule in slot */
+.slot-molecule {
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.slot-molecule .rdkit-viewer {
+    width: 70px;
+    height: 50px;
+}
+
+.slot-molecule .molecule-info {
+    text-align: left;
+}
+
+.slot-molecule {
+    background: white;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.slot-molecule:hover {
+    background: #f8f9fa;
+    border-color: #dc3545;
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.2);
+}
+
+.slot-molecule:active {
+    transform: scale(0.98);
+}
+
+.slot-molecule .rdkit-viewer {
+    width: 70px;
+    height: 50px;
+}
+
+.slot-molecule .molecule-info {
+    text-align: left;
+}
+
+.slot-molecule::after {
+    content: '✕';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: #dc3545;
+    font-size: 16px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.slot-molecule:hover::after {
+    opacity: 1;
+}
+
+.practice-box {
+    padding: 15px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 20px auto 0;
+    padding: 8px;
+    background-color: Navy;
+    color: white;
+    border-radius: 10px;
+}
+
+.view-label {
+    transition: opacity 0.3s;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 900px) {
+    .two-column-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .left-column {
+        order: 2;
+    }
+    
+    .drop-zone {
+        order: 1;
+    }
+    
+    .molecule-bank {
+        min-height: auto;
+    }
+    
+    #molecule-bank-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .app-container {
+        padding: 20px 15px;
+    }
+    
+    #molecule-stage {
+        padding: 15px;
+    }
+    
+    #molecule-bank-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .molecule-card {
+        grid-template-columns: 60px 1fr;
+    }
+    
+    .slot-header {
+        grid-template-columns: 40px 1fr;
+    }
+    
+    .slot-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1.1em;
+    }
+    
+    .controls-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    button {
+        width: 100%;
+        max-width: 280px;
+    }
+}
+
+/* ==================== HINT MODAL ==================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 0;
+    border: 2px solid #888;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 10px;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 1.5em;
+}
+
+.close-modal {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    transition: all 0.2s ease;
+}
+
+.close-modal:hover,
+.close-modal:focus {
+    color: #ff3b3b;
+    transform: scale(1.2);
+}
+
+.modal-body {
+    padding: 15px;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-body > p:first-child {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 0px;
+    color: #333;
+}
+
+.pka-order-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pka-item {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    gap: 4px;
+    align-items: center;
+    padding: 4px;
+    background: #dde9f7;
+    border-left: 4px solid #667eea;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+}
+
+.pka-item:hover {
+    background: #c6c9cb;
+    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pka-arrow {
+    font-size: 1.5em;
+    color: #667eea;
+    font-weight: bold;
+}
+
+.pka-category {
+    font-weight: 200;
+    color: #333;
+}
+
+.pka-range {
+    font-size: 0.85em;
+    color: #424242;
+    font-family: 'Courier New', monospace;
+    background: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+/* Mobile responsive for modal */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .modal-header {
+        padding: 15px;
+    }
+    
+    .modal-header h3 {
+        font-size: 1.2em;
+    }
+    
+    .modal-body {
+        padding: 15px;
+    }
+    
+    .pka-item {
+        grid-template-columns: 25px 1fr;
+        gap: 8px;
+    }
+    
+    .pka-range {
+        grid-column: 2;
+        justify-self: start;
+        margin-top: 4px;
+    }
+}

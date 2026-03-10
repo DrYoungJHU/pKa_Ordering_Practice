@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organic pKa Practice Pro</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/@rdkit/rdkit/Code/MinimalLib/dist/RDKit_minimal.js"></script>
+</head>
+<body>
+
+<div class="app-container">
+    <h1>Organic Chemistry pKa Ordering</h1>
+    <p>Practice ordering organic molecules by their pKa values as requested by Dr. Eric Hill for his organic chemistry class. This app is (or, rather, will be) based on Scudder's <em>Electron Flow in Organic Chemistry</em> pKa chart.</p>
+
+    <div class="controls">
+        <div class="controls-row">
+            <div class="switch-container" title="Switch between practice (question) mode and reference (answer) mode">
+                <span class="view-label">Reference</span>
+                <label class="switch">
+                    <input type="checkbox" id="practice-toggle" onchange="updateUI()" checked>
+                    <span class="slider round"></span>
+                </label>
+                <span class="view-label">Practice</span>
+            </div>
+            <button onclick="generateNewProblem()">Generate New Problem</button>
+            <button onclick="resetOrder()" class="secondary">Reset Current Problem</button>
+        </div>
+    </div>
+
+    <!-- Instructions Box -->
+    <div class="stats-box" id="instructions-display">
+        <p>Drag molecules from the left into the numbered slots on the right in order from <strong>lowest pKa</strong> to <strong>highest pKa</strong>.</p>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div id="molecule-stage">
+        <div class="two-column-layout">
+            <!-- Left Column: Molecule Bank + Practice Controls -->
+            <div class="left-column">
+                <div class="molecule-bank">
+                    <h3>Molecules</h3>
+                    <div id="molecule-bank-container"></div>
+                </div>
+                
+                <!-- Practice Mode Controls (below molecule bank) -->
+                <div class="practice-controls" id="practice-controls" style="display: block;">
+                    <button onclick="checkAnswer()" class="check-btn">Check Answer</button>
+                    <button onclick="toggleHint()" class="hint-btn" id="hint-toggle-btn">Show Hint</button>
+                    <p id="practice-feedback" style="margin-top: 10px; font-weight: bold; min-height: 20px; font-size: 1em;"></p>
+                    
+                    <!-- Hint Box (collapsible) -->
+                    <div id="hint-box" style="display:none; margin-top: 10px; background: #fff3cd; border: 1px solid #ffc107; padding: 10px; border-radius: 5px;">
+                        <p style="margin: 5px 0; font-weight: bold;">💡 Hint:</p>
+                        <p id="hint-text" style="margin: 5px 0; font-size: 0.9em;">Remember the general pKa order: Strong acids &lt; Carboxylic acids &lt; Phenols &lt; Water/Alcohols &lt; Carbonyls &lt; Alkynes &lt; Amines &lt; Alkenes/Aromatics &lt; Alkanes</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Drop Slots -->
+            <div class="drop-zone">
+                <h3>Order by pKa</h3>
+                <div id="drop-slots-container">
+                    <!-- Slot 1 -->
+                    <div class="drop-slot" data-slot="0">
+                        <div class="slot-header">
+                            <div class="slot-number">1</div>
+                            <div class="slot-label">Lowest pKa<br><small>(Most Acidic)</small></div>
+                        </div>
+                        <div class="slot-content empty" id="slot-0"></div>
+                    </div>
+                    
+                    <!-- Slot 2 -->
+                    <div class="drop-slot" data-slot="1">
+                        <div class="slot-header">
+                            <div class="slot-number">2</div>
+                            <div class="slot-label">↓</div>
+                        </div>
+                        <div class="slot-content empty" id="slot-1"></div>
+                    </div>
+                    
+                    <!-- Slot 3 -->
+                    <div class="drop-slot" data-slot="2">
+                        <div class="slot-header">
+                            <div class="slot-number">3</div>
+                            <div class="slot-label">↓</div>
+                        </div>
+                        <div class="slot-content empty" id="slot-2"></div>
+                    </div>
+                    
+                    <!-- Slot 4 -->
+                    <div class="drop-slot" data-slot="3">
+                        <div class="slot-header">
+                            <div class="slot-number">4</div>
+                            <div class="slot-label">Highest pKa<br><small>(Least Acidic)</small></div>
+                        </div>
+                        <div class="slot-content empty" id="slot-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reference Mode Section -->
+    <div id="reference-box" style="display:none; margin-top: 10px; background: #e3f2fd; border: 1px solid #90caf9; padding: 15px; border-radius: 5px;">
+        <p style="margin: 5px 0; font-weight: bold;">Correct Order (Lowest → Highest pKa):</p>
+        <div id="answer-display" style="margin-top: 10px;"></div>
+    </div>
+
+      <div id="hint-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>💡 Hint</h3>
+                <span class="close-modal" onclick="closeHintModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                                <p style="margin-top: 2px; font-style: italic; color: #666; font-size: 0.85em;">
+                    Remember, the <strong>lower</strong> the pKa, the <strong>stronger</strong> the acid, and the more acidic the proton.
+                </p>
+                <p style="font-size: 0.8em;">Recall the general order of functional group pKa values:</p>
+                <div class="pka-order-list">
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Strong acids (HCl, H₂SO₄)</span>
+                        <span class="pka-range">pKa &lt; 0</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Carboxylic acids (RCOOH)</span>
+                        <span class="pka-range">pKa ≈ 3-5</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Phenols (ArOH)</span>
+                        <span class="pka-range">pKa ≈ 10</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Water / Alcohols (ROH)</span>
+                        <span class="pka-range">pKa ≈ 15-16</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Carbonyls (α-H)</span>
+                        <span class="pka-range">pKa ≈ 19-20</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Terminal Alkynes</span>
+                        <span class="pka-range">pKa ≈ 25</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Ammonia / Amines</span>
+                        <span class="pka-range">pKa ≈ 35-40</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Aromatics / Alkenes</span>
+                        <span class="pka-range">pKa ≈ 43-44</span>
+                    </div>
+                    <div class="pka-item">
+                        <span class="pka-arrow">↓</span>
+                        <span class="pka-category">Alkanes</span>
+                        <span class="pka-range">pKa ≈ 50+</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="script.js"></script>
+
+    <br>
+    <footer>
+        <p><strong>Built by:</strong> Jamie Young, Johns Hopkins Chemistry. Based on Scudder, <em>Electron Flow in Organic Chemistry</em>.</p>
+    </footer>
+</div>
+
+</body>
+</html>
